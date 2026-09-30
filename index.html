@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#151512">
+<title>一椀 — 和モダンラーメン</title>
+<style>
+:root{
+  --sumi:#171714;
+  --sumi-2:#24241f;
+  --washi:#eee9dc;
+  --washi-2:#e2dccb;
+  --kin:#a88b5a;
+  --ink:#27261f;
+  --muted:#777264;
+  --line:rgba(39,38,31,.18);
+  --white:rgba(255,255,255,.76);
+  --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
+  --sans:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+  --ease:cubic-bezier(.22,.72,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--washi);color:var(--ink);
+  font-family:var(--serif);line-height:1.9;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.08;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+.site-header{
+  position:fixed;z-index:40;top:0;left:0;width:100%;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px clamp(22px,5vw,72px);
+  color:var(--washi);mix-blend-mode:difference;
+  pointer-events:none;
+}
+.brand{font-size:20px;letter-spacing:.16em;pointer-events:auto}
+.brand small{display:block;font-family:var(--sans);font-size:8px;letter-spacing:.24em;opacity:.7}
+.nav{display:flex;gap:26px;font-family:var(--sans);font-size:11px;letter-spacing:.08em;pointer-events:auto}
+.nav a{opacity:.75;transition:opacity .3s ease}
+.nav a:hover,.nav a:focus-visible{opacity:1}
+.hero{
+  min-height:100svh;background:var(--sumi);color:var(--washi);
+  position:relative;display:grid;place-items:center;overflow:hidden;
+}
+.hero:after{
+  content:"";position:absolute;width:55vw;height:55vw;max-width:700px;max-height:700px;
+  border-radius:50%;right:-20%;top:12%;
+  background:radial-gradient(circle,rgba(168,139,90,.16),transparent 65%);
+  filter:blur(8px);
+}
+.hero-inner{
+  width:min(1200px,90vw);display:grid;grid-template-columns:1fr 1.15fr;
+  align-items:center;gap:clamp(20px,5vw,90px);position:relative;z-index:2;
+}
+.hero-copy{padding-top:50px}
+.kicker{font-family:var(--sans);font-size:10px;letter-spacing:.2em;color:#c4b79e;margin-bottom:24px}
+.hero h1{font-size:clamp(58px,9vw,128px);font-weight:400;line-height:.9;letter-spacing:.08em;margin:0 0 28px}
+.hero h1 span{display:block;font-size:.28em;line-height:1.8;letter-spacing:.24em;margin-top:24px;color:#c9c0ae}
+.hero-lead{max-width:29em;color:#cfc8ba;font-size:15px;line-height:2.2}
+.scroll-note{margin-top:48px;display:flex;align-items:center;gap:14px;font-family:var(--sans);font-size:9px;letter-spacing:.18em;color:#aaa294}
+.scroll-line{width:54px;height:1px;background:#8d8578;transform-origin:left;animation:breath 2.8s ease-in-out infinite}
+@keyframes breath{50%{transform:scaleX(.55);opacity:.4}}
+.ramen-stage{min-height:580px;display:grid;place-items:center;position:relative}
+.ramen-svg{width:min(650px,100%);height:auto;overflow:visible;filter:drop-shadow(0 30px 34px rgba(0,0,0,.38));transition:transform .8s var(--ease)}
+.ramen-stage:hover .ramen-svg{transform:translateY(-5px) rotate(.3deg)}
+.steam{opacity:.25;animation:steam 5s ease-in-out infinite}
+.steam.s2{animation-delay:1.5s}.steam.s3{animation-delay:3s}
+@keyframes steam{0%,100%{transform:translateY(8px);opacity:0}.35%{opacity:.24}50%{transform:translateY(-18px);opacity:.12}85%{opacity:0}}
+.section{padding:clamp(100px,13vw,190px) clamp(22px,8vw,120px);position:relative}
+.section-inner{max-width:1120px;margin:auto}
+.section-head{display:grid;grid-template-columns:.7fr 1.3fr;gap:50px;margin-bottom:80px}
+.section-title{font-size:clamp(38px,5vw,66px);font-weight:400;line-height:1.05;margin:0;letter-spacing:.06em}
+.section-intro{max-width:550px;font-size:15px;color:#5d594f;line-height:2.2}
+.menu-section{background:#ded7c7}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.menu-item{
+  text-align:left;background:transparent;border:0;border-right:1px solid var(--line);
+  padding:34px 28px 38px;min-height:290px;cursor:pointer;
+  transition:background .45s ease,transform .45s var(--ease);
+  color:inherit;touch-action:manipulation;
+}
+.menu-item:last-child{border-right:0}
+.menu-item:hover,.menu-item:focus-visible,.menu-item.active{background:rgba(255,255,255,.3);transform:translateY(-3px)}
+.menu-num{font-family:var(--sans);font-size:10px;letter-spacing:.16em;color:#837c6c}
+.menu-item h3{font-size:25px;font-weight:400;margin:46px 0 14px}
+.menu-item p{font-size:13px;color:#676156;line-height:2}
+.price{display:block;margin-top:28px;font-family:var(--sans);font-size:13px;letter-spacing:.08em}
+.commit{background:var(--washi)}
+.commit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+.commit-card{background:var(--washi);padding:45px 32px 52px;min-height:310px}
+.commit-card h3{font-size:23px;font-weight:400;margin:20px 0}
+.commit-card p{font-size:13px;color:#625e55;line-height:2.25}
+.mark{font-family:var(--sans);font-size:10px;letter-spacing:.16em;color:#9a8259}
+.story{background:var(--sumi);color:var(--washi);overflow:hidden}
+.story:before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 78% 40%,rgba(168,139,90,.13),transparent 35%);
+}
+.story-inner{position:relative;z-index:1;display:grid;grid-template-columns:.7fr 1.3fr;gap:80px;align-items:start}
+.story h2{font-size:clamp(42px,6vw,82px);font-weight:400;line-height:1.05;margin:0}
+.story-copy{max-width:650px}
+.story-copy .lead{font-size:clamp(22px,3vw,34px);line-height:1.9;margin:0 0 40px}
+.story-copy p{color:#c2bcaf;font-size:14px;line-height:2.3;margin:0 0 20px}
+.signature{margin-top:55px;border-top:1px solid rgba(238,233,220,.2);padding-top:22px;font-size:13px;letter-spacing:.12em}
+.footer{background:var(--sumi);color:#8e887d;border-top:1px solid rgba(238,233,220,.12);padding:35px 8vw;font-family:var(--sans);font-size:9px;letter-spacing:.12em;display:flex;justify-content:space-between}
+.reveal{
+  /* コンテンツは常に表示。JSが動かないプレビュー環境でも空白にならない */
+  opacity:1;
+  transform:none;
+}
+.reveal.is-visible{
+  animation:revealIn .85s var(--ease) both;
+}
+@keyframes revealIn{
+  from{opacity:.01;transform:translateY(24px)}
+  to{opacity:1;transform:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}.reveal{opacity:1;transform:none;animation:none}
+  .steam,.scroll-line{animation:none}.ramen-svg{transition:none}
+}
+@media (max-width:900px){
+  .hero-inner{grid-template-columns:1fr;gap:0;padding-top:70px}
+  .hero-copy{position:relative;z-index:3}
+  .hero h1{font-size:clamp(58px,14vw,100px)}
+  .ramen-stage{min-height:390px;margin-top:-55px}
+  .section-head,.story-inner{grid-template-columns:1fr;gap:25px}
+  .menu-grid{grid-template-columns:1fr}
+  .menu-item{border-right:0;border-bottom:1px solid var(--line);min-height:0}
+  .commit-grid{grid-template-columns:1fr}
+  .commit-card{min-height:0}
+}
+@media (max-width:600px){
+  .site-header{padding:18px 18px}.nav{gap:12px;font-size:9px}
+  .brand{font-size:16px}
+  .hero-inner{width:90vw}.hero-lead{font-size:13px}
+  .ramen-stage{min-height:300px}
+  .section{padding:95px 22px}
+  .section-head{margin-bottom:50px}
+  .menu-item{padding:30px 20px}
+  .story-copy .lead{font-size:22px}
+  .footer{padding:28px 22px;display:block}.footer span{display:block;margin-top:8px}
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="#top" aria-label="一椀 トップ">一椀<small>ICHWAN</small></a>
+  <nav class="nav" aria-label="メインナビゲーション">
+    <a href="#menu">メニュー</a>
+    <a href="#commit">こだわり</a>
+    <a href="#story">物語</a>
+  </nav>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy reveal">
+      <div class="kicker">一杯に、静かな仕事を。</div>
+      <h1>一椀<span>和の余白から生まれるラーメン</span></h1>
+      <p class="hero-lead">麺、スープ、食材。ひとつずつの仕事を重ね、最後に一杯へ。飾らない味わいを、静かな佇まいとともに。</p>
+      <div class="scroll-note"><span class="scroll-line"></span> SCROLL TO TASTE</div>
+    </div>
+    <div class="ramen-stage reveal" id="ramenStage" aria-label="和モダンに描いたラーメンのイラスト">
+      <svg class="ramen-svg" viewBox="0 0 700 560" role="img" aria-labelledby="ramenTitle ramenDesc">
+        <title id="ramenTitle">一椀のラーメン</title>
+        <desc id="ramenDesc">墨色の器に黄金色のスープ、麺、焼豚、葱を配した和モダンなグラフィック。</desc>
+        <defs>
+          <radialGradient id="broth" cx="46%" cy="38%">
+            <stop offset="0" stop-color="#d9b873"/><stop offset=".68" stop-color="#b48b4e"/><stop offset="1" stop-color="#806139"/>
+          </radialGradient>
+          <linearGradient id="bowl" x1="0" x2="0" y1="0" y2="1">
+            <stop stop-color="#34332d"/><stop offset=".55" stop-color="#191916"/><stop offset="1" stop-color="#0d0d0c"/>
+          </linearGradient>
+          <linearGradient id="chashu" x1="0" x2="1">
+            <stop stop-color="#744b35"/><stop offset=".5" stop-color="#9b6948"/><stop offset="1" stop-color="#5b3a2b"/>
+          </linearGradient>
+          <filter id="soft"><feGaussianBlur stdDeviation="4"/></filter>
+        </defs>
+        <!-- steam -->
+        <g fill="none" stroke="#ddd3bf" stroke-width="4" stroke-linecap="round" class="steam">
+          <path d="M300 175 C270 145 315 122 292 91 C275 69 303 49 288 27"/>
+          <path d="M368 155 C345 126 388 108 365 77 C348 55 375 35 362 14"/>
+          <path d="M434 171 C408 139 450 119 431 91 C414 67 444 47 430 26"/>
+        </g>
+        <!-- shadow -->
+        <ellipse cx="355" cy="477" rx="235" ry="32" fill="#000" opacity=".3" filter="url(#soft)"/>
+        <!-- bowl -->
+        <path d="M126 270 C143 420 210 485 352 490 C495 485 559 420 576 270 Z" fill="url(#bowl)"/>
+        <ellipse cx="351" cy="270" rx="228" ry="84" fill="#0f0f0e"/>
+        <ellipse cx="351" cy="269" rx="209" ry="69" fill="url(#broth)"/>
+        <ellipse cx="351" cy="265" rx="193" ry="56" fill="none" stroke="#e1c987" stroke-opacity=".35" stroke-width="3"/>
+        <!-- noodles: layered organic paths -->
+        <g fill="none" stroke="#ead69c" stroke-width="7" stroke-linecap="round" opacity=".88">
+          <path d="M190 265 C220 226 259 310 291 263 C321 219 355 303 385 261 C416 220 451 297 486 255"/>
+          <path d="M205 286 C238 249 265 315 301 281 C335 249 361 314 396 278 C430 246 462 300 493 276"/>
+          <path d="M225 244 C252 219 279 272 309 244 C341 215 365 271 398 241 C429 214 456 264 477 243"/>
+          <path d="M240 303 C270 280 295 326 324 300 C355 273 382 322 414 298 C442 276 463 310 478 300"/>
+        </g>
+        <!-- chashu -->
+        <g transform="translate(195 210) rotate(-8)">
+          <ellipse cx="70" cy="45" rx="68" ry="36" fill="url(#chashu)" stroke="#d6ad78" stroke-opacity=".45" stroke-width="3"/>
+          <path d="M25 39 C45 25 62 60 84 39 C99 25 110 38 119 48" fill="none" stroke="#e5c296" stroke-width="5" opacity=".55"/>
+        </g>
+        <g transform="translate(416 222) rotate(8)">
+          <ellipse cx="55" cy="38" rx="58" ry="32" fill="url(#chashu)" stroke="#d6ad78" stroke-opacity=".4" stroke-width="3"/>
+          <path d="M19 36 C37 22 53 51 71 33 C83 22 95 32 104 41" fill="none" stroke="#e5c296" stroke-width="5" opacity=".5"/>
+        </g>
+        <!-- egg -->
+        <ellipse cx="348" cy="214" rx="42" ry="31" fill="#eee2b8" transform="rotate(-8 348 214)"/>
+        <circle cx="348" cy="214" r="13" fill="#c38d38"/>
+        <!-- green onion -->
+        <g stroke="#9a9c72" stroke-width="8" stroke-linecap="round">
+          <path d="M270 224 l-34 -23"/><path d="M283 231 l-21 -37"/><path d="M420 226 l30 -31"/><path d="M433 234 l39 -17"/>
+        </g>
+        <!-- bowl highlight -->
+        <path d="M170 346 C194 421 244 451 303 461" fill="none" stroke="#77746a" stroke-opacity=".35" stroke-width="6" stroke-linecap="round"/>
+        <path d="M166 297 C174 318 180 333 187 344" fill="none" stroke="#b4a98e" stroke-opacity=".3" stroke-width="3"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section menu-section" id="menu">
+  <div class="section-inner">
+    <div class="section-head reveal">
+      <h2 class="section-title">メニュー</h2>
+      <p class="section-intro">一杯ごとに、味の輪郭が違う。名前と価格だけでは伝わらない部分を、短い言葉で添えています。</p>
+    </div>
+    <div class="menu-grid reveal">
+      <button class="menu-item active" type="button">
+        <span class="menu-num">01</span><h3>澄み醤油</h3>
+        <p>香りを立たせた醤油と、静かに重なる鶏の旨み。</p>
+        <span class="price">¥1,200</span>
+      </button>
+      <button class="menu-item" type="button">
+        <span class="menu-num">02</span><h3>白味噌</h3>
+        <p>丸みのある甘みと香ばしさ。余韻を長く楽しむ一杯。</p>
+        <span class="price">¥1,300</span>
+      </button>
+      <button class="menu-item" type="button">
+        <span class="menu-num">03</span><h3>塩清湯</h3>
+        <p>素材の輪郭を残しながら、軽やかに仕上げた塩。</p>
+        <span class="price">¥1,250</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section class="section commit" id="commit">
+  <div class="section-inner">
+    <div class="section-head reveal">
+      <h2 class="section-title">こだわり</h2>
+      <p class="section-intro">足すことより、整えること。一杯の中で、それぞれの素材が静かに仕事をするように。</p>
+    </div>
+    <div class="commit-grid reveal">
+      <article class="commit-card">
+        <span class="mark">NOODLE</span>
+        <h3>麺へのこだわり</h3>
+        <p>スープを受け止め、噛んだときに香りがほどける。細さとしなやかさのバランスを大切にします。</p>
+      </article>
+      <article class="commit-card">
+        <span class="mark">SOUP</span>
+        <h3>スープへのこだわり</h3>
+        <p>強さだけを追わず、温度と香りの変化まで含めて一杯を設計。最後のひと口まで静かに続く味を目指します。</p>
+      </article>
+      <article class="commit-card">
+        <span class="mark">INGREDIENTS</span>
+        <h3>食材へのこだわり</h3>
+        <p>素材を主張させすぎない。旬や状態を見ながら、麺とスープの間にちょうどよく置いていきます。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section story" id="story">
+  <div class="section-inner story-inner">
+    <div class="reveal"><h2>物語</h2></div>
+    <div class="story-copy reveal">
+      <p class="lead">「一杯は、料理人の手だけで完成するものではない。食べる人の時間まで含めて、一杯だと思っています。」</p>
+      <p>湯気が立つほんの数分を、少しだけ特別にする。そのために、麺を整え、スープを重ね、器を温める。</p>
+      <p>目立つ仕事ではなくても、ひとつずつ丁寧に。静かな店内で、今日の一杯がその人の記憶に残れば、それで十分です。</p>
+      <div class="signature">店主　—　一椀</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <span>一椀 / ICHWAN</span>
+  <span>和の余白から生まれるラーメン</span>
+</footer>
+
+<script>
+(() => {
+  const reveal = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add('is-visible'); reveal.unobserve(e.target); }
+    });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el => reveal.observe(el));
+
+  const items = document.querySelectorAll('.menu-item');
+  items.forEach(item => item.addEventListener('pointerdown', () => {
+    items.forEach(x => x.classList.remove('active'));
+    item.classList.add('active');
+  }));
+
+  const stage = document.getElementById('ramenStage');
+  const svg = stage.querySelector('.ramen-svg');
+  stage.addEventListener('pointermove', e => {
+    if(e.pointerType === 'touch') return;
+    const r = stage.getBoundingClientRect();
+    const x = (e.clientX-r.left)/r.width-.5;
+    const y = (e.clientY-r.top)/r.height-.5;
+    svg.style.transform = `translate(${x*8}px,${y*6}px) rotate(${x*.35}deg)`;
+  });
+  stage.addEventListener('pointerleave', () => svg.style.transform='');
+
+  // Keep touch scrolling natural; pointer interactions are intentionally restrained.
+  document.querySelectorAll('button,.nav a,.brand').forEach(el => el.style.touchAction='manipulation');
+})();
+</script>
+</body>
+</html>
